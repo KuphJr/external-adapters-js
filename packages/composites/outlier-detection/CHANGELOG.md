@@ -1,5 +1,50 @@
 # @chainlink/outlier-detection-adapter
 
+## 1.0.48
+
+### Patch Changes
+
+- 9041e0252: refactorted config into folder, moved ea presets into adapter folders, changed validator to accept ea presets
+- Updated dependencies [341f2bd4d]
+- Updated dependencies [9041e0252]
+  - @chainlink/ea-bootstrap@1.11.1
+  - @chainlink/ea@1.0.48
+  - @chainlink/ea-reference-data-reader@1.1.4
+  - @chainlink/ea-test-helpers@1.1.0
+
+## 1.0.47
+
+### Patch Changes
+
+- Updated dependencies [eecdac90b]
+  - @chainlink/ea-bootstrap@1.11.0
+  - @chainlink/ea-reference-data-reader@1.1.3
+  - @chainlink/ea-test-helpers@1.1.0
+  - @chainlink/ea@1.0.47
+
+## 1.0.46
+
+### Patch Changes
+
+- Updated dependencies [57be274ff]
+- Updated dependencies [540e563a9]
+- Updated dependencies [72f96124d]
+- Updated dependencies [a1731716f]
+  - @chainlink/ea-bootstrap@1.10.6
+  - @chainlink/ea-test-helpers@1.1.0
+  - @chainlink/ea@1.0.46
+  - @chainlink/ea-reference-data-reader@1.1.2
+
+## 1.0.45
+
+### Patch Changes
+
+- Updated dependencies [4865d3b46]
+  - @chainlink/ea-bootstrap@1.10.5
+  - @chainlink/ea@1.0.45
+  - @chainlink/ea-reference-data-reader@1.1.1
+  - @chainlink/ea-test-helpers@1.0.1
+
 ## 1.0.44
 
 ### Patch Changes
