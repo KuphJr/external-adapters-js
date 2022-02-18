@@ -100,18 +100,44 @@ const handleBatchedRequest = (
 
 export const execute: ExecuteWithConfig<Config> = async (request, context, config) => {
   const validator = new Validator(request, inputParameters)
-
   const endpoint = validator.validated.data.endpoint
   const jobRunID = validator.validated.id
   const base = validator.overrideSymbol(AdapterName)
   const quote = validator.validated.data.quote
   const coinid = validator.validated.data.coinid
-  let idToSymbol = {}
+  let requestedSymbols = ['']
+  if (request.data.from) {
+    requestedSymbols = Array.isArray(request.data.from) ? request.data.from : [request.data.from]
+  } else {
+    requestedSymbols = Array.isArray(request.data.base) ? request.data.base : [request.data.base]
+  }
+  requestedSymbols = requestedSymbols.map((s: string) => {
+    return s.toLowerCase()
+  })
+  let idToSymbol = {} as Record<string, string>
   let ids = coinid
   if (!ids) {
     const coinIds = await getCoinIds(context, jobRunID)
     const symbols = Array.isArray(base) ? base : [base]
     idToSymbol = getSymbolsToIds(symbols, coinIds)
+    const symbolToIdOverride = validator.validated.symbolToIdOverride?.[AdapterName.toLowerCase()]
+    // if there is an id provided by getSymbolsToIds, delete it and
+    // instead use the id provided in the symbolToOverrideId parameter
+    if (symbolToIdOverride) {
+      for (const symbolAndId of Object.entries(symbolToIdOverride)) {
+        for (const idAndSymbol of Object.entries(idToSymbol)) {
+          if (idAndSymbol[1] === symbolAndId[0].toLowerCase()) {
+            delete idToSymbol[idAndSymbol[0]]
+          }
+        }
+        if (
+          requestedSymbols.includes(symbolAndId[0].toLowerCase()) ||
+          requestedSymbols.includes(symbolAndId[1] as string)
+        ) {
+          idToSymbol[symbolAndId[1] as string] = symbolAndId[0].toLowerCase()
+        }
+      }
+    }
     ids = Object.keys(idToSymbol).join(',')
   }
 

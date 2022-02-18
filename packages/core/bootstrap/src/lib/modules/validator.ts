@@ -5,6 +5,7 @@ import {
   IncludePair,
   InputParameter,
   InputParameters,
+  SymbolToIdOverride,
 } from '@chainlink/types'
 import { merge } from 'lodash'
 import { isArray, isObject } from '../util'
@@ -30,6 +31,7 @@ export class Validator {
   inputOptions: Record<string, any[]>
   validatorOptions: ValidatorOptions
   validated: any
+  symbolToIdOverride: SymbolToIdOverride | undefined
   error: AdapterError | undefined
   errored: AdapterErrorResponse | undefined
   constructor(
@@ -49,6 +51,7 @@ export class Validator {
     this.validateOverrides('overrides', presetSymbols)
     this.validateOverrides('tokenOverrides', presetTokens)
     this.validateIncludeOverrides()
+    this.validateSymbolToIdOverride()
   }
 
   validateInput(): void {
@@ -95,6 +98,21 @@ export class Validator {
       ])
     } catch (e) {
       this.parseError(e)
+    }
+  }
+
+  validateSymbolToIdOverride(): void {
+    if (this.input.data?.symbolToIdOverride) {
+      for (const symbolToIdOverrides of Object.values(
+        this.input.data.symbolToIdOverride as SymbolToIdOverride,
+      )) {
+        for (const overrideId of Object.values(symbolToIdOverrides)) {
+          if (typeof overrideId !== 'string') {
+            this.throwInvalid('Invalid format for parameter: symbolToIdOverride')
+          }
+        }
+      }
+      this.validated.symbolToIdOverride = this.input.data.symbolToIdOverride
     }
   }
 

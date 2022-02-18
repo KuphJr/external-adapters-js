@@ -307,6 +307,12 @@ declare module '@chainlink/types' {
     to: string
     includes: IncludePair[]
   }
+
+  export interface SymbolToIdOverride {
+    [adapterName: string]: {
+      [symbol: string]: string
+    }
+  }
 }
 
 declare module 'object-path'
